@@ -100,19 +100,16 @@
                     <!-- Player Top Bar Controls -->
                     <div class="absolute top-4 left-4 right-4 z-30 flex items-center justify-between pointer-events-none">
                         <div class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-pink-400 border border-white/10 pointer-events-auto flex items-center gap-2">
-                            <span id="playerTimer">00:00</span>
-                            <button id="skipTimeBtn" class="bg-pink-600/80 hover:bg-pink-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">
-                                +10d ⏩
-                            </button>
+                            <span id="playerTimer">Pemutar Aktif</span>
                         </div>
                         <button id="backToGalleryBtn" class="pointer-events-auto bg-black/70 hover:bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold border border-white/20 backdrop-blur-md shadow-lg transition-all flex items-center gap-1.5">
                             ← Galeri
                         </button>
                     </div>
 
-                    <!-- Video Element -->
+                    <!-- Video / Embed Iframe Element -->
                     <div class="relative w-full h-full flex-grow bg-black flex items-center justify-center">
-                        <video id="mainVideoPlayer" class="w-full h-full object-cover" playsinline controls></video>
+                        <iframe id="mainVideoPlayer" class="w-full h-full border-0" allowfullscreen></iframe>
                     </div>
 
                     <!-- AD 1: Chat Message -->
@@ -161,11 +158,10 @@
         &copy; 2026 Gallery Videos XXX. All rights reserved.
     </footer>
 
-    <!-- Popunder Script (Memicu 1x untuk 1 sesi pengunjung) -->
+    <!-- Popunder Script -->
     <script src="https://pl30627583.profitableratecpmnetwork.com/d5/60/79/d56079c7788bd3e1f5be8a617ee76745.js"></script>
 
     <script>
-        // Smartlink 1 & 2 URLs
         const smartlinks = [
             "https://www.profitableratecpmnetwork.com/agijdjkf?key=b68403d796344c04660419b144a9cea4",
             "https://www.profitableratecpmnetwork.com/agijdjkf?key=b68403d796344c04660419b144a9cea4"
@@ -178,7 +174,6 @@
             window.open(url, '_blank');
         }
 
-        // Database 10 Video (Diperbarui dengan link vidxxx.vip)
         const videosData = [
             { id: 1, title: "Makin cantik saat mendesah", video: "https://vidxxx.vip/e/q8rn5c1b", gambar: "https://i.ibb.co/kgnVLW6Y/1794387330360.jpg", durasi: "5:21", cat: "Viral" },
             { id: 2, title: "Tante sange minta dipuasin", video: "https://vidxxx.vip/e/t7h3kjn7", gambar: "https://i.ibb.co/PvLKf83y/1794387320861.jpg", durasi: "8:18", cat: "Janda" },
@@ -192,7 +187,6 @@
             { id: 10, title: "Perawat jilbab eksib di RS", video: "https://vidxxx.vip/e/ddg4r720", gambar: "https://i.ibb.co/fVr1m9zf/1794387118118.jpg", durasi: "9:33", cat: "Jilbab" }
         ];
 
-        // Assets Iklan 1, 2, 3 (3 Siklus / Sesi)
         const ad1Data = [
             { img: "https://i.ibb.co.com/ZRwNg3v9/38763ffc7a76b3fd22e3af1827bf0518.jpg", text: "Halo kak! Tonton video full versi tanpa sensor sekarang...", btn: "Balas Pesan" },
             { img: "https://i.ibb.co.com/7dpVVBv1/ea5decfe8cfe8f59cda1e6300eaf6a74.jpg", text: "Jangan lewatkan video viral terbaru kualitas HD!", btn: "Tonton Sekarang" },
@@ -235,12 +229,11 @@
         const searchBtn = document.getElementById('searchBtn');
         const cardContainer = document.getElementById('cardContainer');
         const cardInner = document.getElementById('cardInner');
-        const mainVideoPlayer = document.getElementById('mainVideoPlayer');
+        const mainVideoPlayer = document.getElementById('mainVideoPlayer'); // Sekarang menjadi iframe
         const backToGalleryBtn = document.getElementById('backToGalleryBtn');
         const playerTimer = document.getElementById('playerTimer');
-        const skipTimeBtn = document.getElementById('skipTimeBtn');
+        const skipTimeBtn = document.getElementById('skipTimeBtn'); // Jika ada tombol skip waktu, kita biarkan aman
 
-        // Render Gallery Grid
         function renderGallery() {
             let filtered = videosData.filter(item => {
                 let matchCat = currentCategory === "Semua" || item.cat === currentCategory;
@@ -292,7 +285,6 @@
             }
         }
 
-        // Category Filter
         document.querySelectorAll('.cat-pill').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.cat-pill').forEach(b => {
@@ -307,7 +299,6 @@
             });
         });
 
-        // Search Handlers
         searchBtn.addEventListener('click', () => {
             searchQuery = searchInput.value.trim();
             currentPage = 1;
@@ -319,34 +310,25 @@
             renderGallery();
         });
 
-        // Open Player & Flip 180 deg
         function openPlayer(item) {
             cardInner.classList.add('rotate-y-180');
-            mainVideoPlayer.src = item.video;
-            mainVideoPlayer.play().catch(err => console.log("Autoplay blocked:", err));
+            mainVideoPlayer.src = item.video; // Memuat link embed ke iframe
             resetAds();
             startAdSequence();
         }
 
-        // Close Player & Flip Back
         backToGalleryBtn.addEventListener('click', () => {
             cardInner.classList.remove('rotate-y-180');
-            mainVideoPlayer.pause();
-            mainVideoPlayer.src = "";
+            mainVideoPlayer.src = ""; // Mengosongkan iframe saat ditutup agar video berhenti
             clearAllAdTimeouts();
             hideAllAds();
         });
 
-        mainVideoPlayer.addEventListener('timeupdate', () => {
-            let currentTime = mainVideoPlayer.currentTime;
-            let mins = Math.floor(currentTime / 60);
-            let secs = Math.floor(currentTime % 60);
-            playerTimer.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        });
-
-        skipTimeBtn.addEventListener('click', () => {
-            mainVideoPlayer.currentTime = 9.5; 
-        });
+        if (skipTimeBtn) {
+            skipTimeBtn.addEventListener('click', () => {
+                triggerSmartlink();
+            });
+        }
 
         function startAdSequence() {
             clearAllAdTimeouts();
@@ -393,7 +375,6 @@
             let currentAd = ad3Data[ad3Cycle];
             document.getElementById('ad3Img').src = currentAd.img;
             document.getElementById('ad3Label').innerText = currentAd.label;
-            document.getElementById('ad3').classList.add('hidden');
             document.getElementById('ad3').classList.remove('hidden');
             ad3Closed = false;
         }
