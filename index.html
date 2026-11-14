@@ -3,124 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidoy - Video Player</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Gallery Videos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #0b0c10;
-            color: #ffffff;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(25, 33, 53, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-    <!-- Header / Navbar -->
-    <header class="w-full py-4 px-6 md:px-12 flex items-center justify-between border-b border-gray-800/50">
-        <div class="flex items-center gap-2">
-            <div class="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-2 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg shadow-pink-500/20">
-                <i class="fa-solid fa-play text-sm"></i>
-            </div>
-            <span class="text-2xl font-black tracking-wider italic">vidoy</span>
+    <!-- Top Header -->
+    <header class="w-full py-6 px-4 text-center relative z-20">
+        <div class="inline-block relative">
+            <h1 class="text-6xl sm:text-7xl font-black uppercase tracking-widest text-transparent select-none opacity-40 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style="-webkit-text-stroke: 2px #ec4899; z-index: 1;">
+                XXX
+            </h1>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white relative" style="z-index: 10; text-shadow: 0 4px 20px rgba(236,72,153,0.5);">
+                Gallery Videos <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500"></span>
+            </h2>
         </div>
-        <div>
-            <button class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg shadow-pink-500/20 transition-all duration-200">
-                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-            </button>
-        </div>
+        <p class="text-xs sm:text-sm text-gray-400 mt-2">Pilih video favorit Anda</p>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
-        
-        <!-- Video Player Container -->
-        <div class="relative w-full aspect-[9/16] md:aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800 group flex items-center justify-center">
-            
-            <!-- Video Thumbnail -->
-            <img src="https://i.ibb.co/LdLZvbXs/1793620115484.jpg" alt="Video Cover" class="absolute inset-0 w-full h-full object-cover opacity-80">
-            
-            <!-- Dark Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40"></div>
+    <!-- Main Container with 3D Flip Card -->
+    <main class="flex-grow flex items-center justify-center px-4 pb-12">
+        <div id="cardContainer" class="w-full max-w-md perspective-1000 transition-transform duration-700">
+            <div id="cardInner" class="relative w-full transform-style-3d duration-700 shadow-2xl rounded-3xl">
 
-            <!-- Top Controls -->
-            <div class="absolute top-4 right-4 flex items-center gap-4 text-white">
-                <button class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center hover:bg-black/60 transition">
-                    <i class="fa-solid fa-volume-high"></i>
-                </button>
-                <button class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center hover:bg-black/60 transition">
-                    <i class="fa-solid fa-gear"></i>
-                </button>
-            </div>
-
-            <!-- Center Big Play Button (Redirect to Exastream) -->
-            <button onclick="redirectToExastream()" class="absolute w-16 h-16 md:w-20 md:h-20 bg-pink-500 hover:bg-pink-600 rounded-full flex items-center justify-center text-white shadow-xl shadow-pink-500/40 transition transform hover:scale-105 cursor-pointer">
-                <i class="fa-solid fa-play text-2xl md:text-3xl ml-1"></i>
-            </button>
-
-            <!-- Watermark Text -->
-            <div class="absolute bottom-16 left-6 text-sm text-gray-200 font-medium">
-               
-            </div>
-
-            <!-- Bottom Controls Bar -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 flex flex-col gap-2 bg-gradient-to-t from-black/90 to-transparent">
-                <div class="flex items-center gap-3">
-                    <button class="text-white hover:text-pink-400 transition">
-                        <i class="fa-solid fa-play text-sm"></i>
-                    </button>
-                    <!-- Progress Bar (Digeser ke kiri pol) -->
-                    <div class="flex-1 relative h-1.5 bg-white/30 rounded-full cursor-pointer">
-                        <div class="absolute top-0 left-0 h-full w-[0%] bg-pink-500 rounded-full"></div>
-                        <div class="absolute top-1/2 left-0 -translate-y-1/2 w-3 h-3 bg-pink-500 rounded-full shadow"></div>
+                <!-- FRONT SIDE: Dashboard Gallery -->
+                <div class="backface-hidden glass rounded-3xl p-5 flex flex-col gap-4 shadow-xl">
+                    
+                    <!-- Search Box -->
+                    <div class="relative flex items-center">
+                        <input type="text" id="searchInput" placeholder="Cari video atau artis..." 
+                            class="w-full bg-slate-900/80 border border-slate-700/60 rounded-2xl py-3 pl-4 pr-24 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-all">
+                        <button id="searchBtn" class="absolute right-1.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition-all">
+                            Cari
+                        </button>
                     </div>
-                    <!-- Waktu Diubah Menjadi 23:47 -->
-                    <span class="text-xs text-gray-300 font-mono"></span>
-                    <div class="flex items-center gap-3 text-gray-300">
-                        <button class="hover:text-white transition"><i class="fa-solid fa-up-right-from-square"></i></button>
-                        <button class="hover:text-white transition"><i class="fa-solid fa-expand"></i></button>
+
+                    <!-- Category Pills -->
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="categoryContainer">
+                        <button class="cat-pill active-cat px-3.5 py-1.5 rounded-xl text-xs font-medium bg-pink-600 text-white shadow-md transition-all shrink-0" data-cat="Semua">Semua</button>
+                        <button class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800/80 hover:bg-slate-700 text-gray-300 transition-all shrink-0" data-cat="Viral">Viral</button>
+                        <button class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800/80 hover:bg-slate-700 text-gray-300 transition-all shrink-0" data-cat="Janda">Janda</button>
+                        <button class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800/80 hover:bg-slate-700 text-gray-300 transition-all shrink-0" data-cat="ABG">ABG</button>
+                        <button class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800/80 hover:bg-slate-700 text-gray-300 transition-all shrink-0" data-cat="Jilbab">Jilbab</button>
                     </div>
+
+                    <!-- Video Grid 2x3 -->
+                    <div id="videoGrid" class="grid grid-cols-2 gap-3.5"></div>
+
+                    <!-- Pagination Controls -->
+                    <div id="paginationContainer" class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs"></div>
                 </div>
+
+                <!-- BACK SIDE: Video Player & Independent Ads -->
+                <div class="absolute inset-0 backface-hidden rotate-y-180 glass rounded-3xl overflow-hidden flex flex-col bg-black shadow-2xl">
+                    
+                    <!-- Player Top Bar Controls -->
+                    <div class="absolute top-4 left-4 right-4 z-30 flex items-center justify-between pointer-events-none">
+                        <div class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-pink-400 border border-white/10 pointer-events-auto flex items-center gap-2">
+                            <span id="playerTimer">00:00</span>
+                            <button id="skipTimeBtn" class="bg-pink-600/80 hover:bg-pink-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">
+                                +10d ⏩
+                            </button>
+                        </div>
+                        <button id="backToGalleryBtn" class="pointer-events-auto bg-black/70 hover:bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold border border-white/20 backdrop-blur-md shadow-lg transition-all flex items-center gap-1.5">
+                            ← Galeri
+                        </button>
+                    </div>
+
+                    <!-- Video Element -->
+                    <div class="relative w-full h-full flex-grow bg-black flex items-center justify-center">
+                        <video id="mainVideoPlayer" class="w-full h-full object-cover" playsinline controls></video>
+                    </div>
+
+                    <!-- AD 1: Chat Message -->
+                    <div id="ad1" class="absolute top-16 left-4 right-4 z-40 bg-white text-gray-900 p-3 rounded-2xl shadow-2xl border border-gray-100 hidden transition-all animate-bounce">
+                        <div class="flex items-start gap-3">
+                            <img id="ad1Img" src="" class="w-10 h-10 rounded-full object-cover border border-pink-200 shrink-0" alt="Sponsor">
+                            <div class="flex-grow pr-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-red-600 tracking-wider">PESAN SPONSOR</span>
+                                    <button onclick="triggerSmartlink(); closeAd('ad1');" class="text-gray-400 hover:text-gray-700 text-xs font-bold px-1">✕</button>
+                                </div>
+                                <p id="ad1Text" class="text-xs font-semibold text-gray-800 mt-0.5"></p>
+                                <button onclick="triggerSmartlink()" class="mt-2 w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-1.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1">
+                                    💬 <span id="ad1BtnText">Balas Pesan</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AD 2: Video Push -->
+                    <div id="ad2" class="absolute top-1/2 -translate-y-1/2 right-3 z-40 w-36 h-52 bg-black rounded-2xl overflow-hidden shadow-2xl border-2 border-pink-500/50 hidden">
+                        <video id="ad2Video" class="w-full h-full object-cover cursor-pointer" onclick="triggerSmartlink()" autoplay muted loop playsinline></video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-2 pointer-events-none">
+                            <span id="ad2Label" class="text-[9px] font-bold text-pink-300 leading-tight mb-1"></span>
+                        </div>
+                        <button onclick="triggerSmartlink(); closeAd('ad2');" class="absolute top-1.5 right-1.5 bg-black/70 hover:bg-black text-white w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold">✕</button>
+                    </div>
+
+                    <!-- AD 3: Image Push -->
+                    <div id="ad3" class="absolute bottom-16 left-3 z-40 w-36 h-52 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border-2 border-purple-500/50 hidden">
+                        <img id="ad3Img" src="" class="w-full h-full object-cover cursor-pointer" onclick="triggerSmartlink()" alt="Ad 3">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-2 pointer-events-none">
+                            <span id="ad3Label" class="text-[9px] font-bold text-yellow-300 leading-tight mb-1"></span>
+                        </div>
+                        <button onclick="triggerSmartlink(); closeAd('ad3');" class="absolute top-1.5 right-1.5 bg-black/70 hover:bg-black text-white w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold">✕</button>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-
-        <!-- Video Title -->
-        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white leading-snug">
-            
-        </h1>
-
-        <!-- Metadata Badges -->
-        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-300">
-            <div class="flex items-center gap-2 bg-[#161821] border border-gray-800 px-4 py-2.5 rounded-xl">
-                <i class="fa-regular fa-clock text-pink-500"></i>
-                <span>23:47</span>
-            </div>
-            <div class="flex items-center gap-2 bg-[#161821] border border-gray-800 px-4 py-2.5 rounded-xl">
-                <i class="fa-solid fa-database text-pink-500"></i>
-                <span>26.9 MB</span>
-            </div>
-            <div class="flex items-center gap-2 bg-[#161821] border border-gray-800 px-4 py-2.5 rounded-xl">
-                <i class="fa-regular fa-eye text-pink-500"></i>
-                <span>927k views</span>
-            </div>
-        </div>
-
-        <div class="inline-flex items-center gap-2.5 bg-[#161821] border border-gray-800 px-4 py-2.5 rounded-xl w-fit text-sm text-gray-300">
-            <i class="fa-regular fa-calendar text-pink-500"></i>
-            <span>12 September 2026</span>
-        </div>
-
     </main>
 
-    <!-- JavaScript untuk Redirect ke Exastream -->
-    <script>
-        function redirectToExastream() {
-            window.location.href = 'https://trbnvideo.live/e/tcqhSqei';
-        }
-    </script>
+    <!-- Footer -->
+    <footer class="w-full py-4 text-center text-xs text-gray-500 border-t border-slate-800/80">
+        &copy; 2026 Gallery Videos XXX. All rights reserved.
+    </footer>
 
-    <!-- Skrip Popunder Adsterra -->
-  <script>(function(s){s.dataset.zone='11740128',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <!-- Popunder Script (Memicu 1x untuk 1 sesi pengunjung) -->
+    <script src="https://pl30627583.profitableratecpmnetwork.com/d5/60/79/d56079c7788bd3e1f5be8a617ee76745.js"></script>
+
+    <script>
+        // Smartlink 1 & 2 URLs
+        const smartlinks = [
+            "https://www.profitableratecpmnetwork.com/agijdjkf?key=b68403d796344c04660419b144a9cea4",
+            "https://www.profitableratecpmnetwork.com/agijdjkf?key=b68403d796344c04660419b144a9cea4"
+        ];
+        let smartlinkIndex = 0;
+
+        function triggerSmartlink() {
+            let url = smartlinks[smartlinkIndex];
+            smartlinkIndex = (smartlinkIndex + 1) % smartlinks.length;
+            window.open(url, '_blank');
+        }
+
+        // Database 10 Video (Diperbarui dengan link gambar dan video baru)
+        const videosData = [
+            { id: 1, title: "Makin cantik saat mendesah", video: "https://vidara.to/e/pkGUs9bWagmHK", gambar: "https://i.ibb.co/kgnVLW6Y/1794387330360.jpg", durasi: "5:21", cat: "Viral" },
+            { id: 2, title: "Tante sange minta dipuasin", video: "https://vidara.to/e/XcBBbmPHkUZzl", gambar: "https://i.ibb.co/PvLKf83y/1794387320861.jpg", durasi: "8:18", cat: "Janda" },
+            { id: 3, title: "Janda kirim pap ke ayang", video: "https://vidara.to/e/wS0ivHnV4jcD8", gambar: "https://i.ibb.co/1J0PRxhm/1794387314100.jpg", durasi: "7:58", cat: "Janda" },
+            { id: 4, title: "ABG masih sempit", video: "https://vidara.to/e/G5nT4DSPKCfYs", gambar: "https://i.ibb.co/Q72t4L1r/1794387307121.jpg", durasi: "8:06", cat: "ABG" },
+            { id: 5, title: "Puasin selingkuhan crot dimuka", video: "https://vidara.to/e/nYdAfR2jYoL6b", gambar: "https://i.ibb.co/1GDmJF7M/1794387234452.jpg", durasi: "4:47", cat: "Viral" },
+            { id: 6, title: "Masih dengan selingkuhan", video: "https://vidara.to/e/m23nKi3BBlaER", gambar: "https://i.ibb.co/0jD0Lk04/1794387208499.jpg", durasi: "1:23", cat: "Viral" },
+            { id: 7, title: "Janda muda menikmati goyangan brondong", video: "https://vidara.to/e/H39SNRFkhiRj3", gambar: "https://i.ibb.co/Q3wS9GNL/1794387157041.jpg", durasi: "3:20", cat: "Janda" },
+            { id: 8, title: "Masih imut sekali", video: "https://vidara.to/e/cRTEmImd0zw1Q", gambar: "https://i.ibb.co/dwgr3Bf3/1794387129039.jpg", durasi: "2:28", cat: "ABG" },
+            { id: 9, title: "Jilbab terbaik", video: "https://vidara.to/e/XYZEdugmk6zhN", gambar: "https://i.ibb.co/7x6xrRxc/1794387219377.jpg", durasi: "5:52", cat: "Jilbab" },
+            { id: 10, title: "Perawat jilbab eksib di RS", video: "https://vidara.to/e/CAZxdNOVVNiVp", gambar: "https://i.ibb.co/fVr1m9zf/1794387118118.jpg", durasi: "9:33", cat: "Jilbab" }
+        ];
+
+        // Assets Iklan 1, 2, 3 (3 Siklus / Sesi)
+        const ad1Data = [
+            { img: "https://i.ibb.co.com/ZRwNg3v9/38763ffc7a76b3fd22e3af1827bf0518.jpg", text: "Halo kak! Tonton video full versi tanpa sensor sekarang...", btn: "Balas Pesan" },
+            { img: "https://i.ibb.co.com/7dpVVBv1/ea5decfe8cfe8f59cda1e6300eaf6a74.jpg", text: "Jangan lewatkan video viral terbaru kualitas HD!", btn: "Tonton Sekarang" },
+            { img: "https://i.ibb.co.com/N2W921ZS/d3f7c0b676a9dde5db9edaecd74f6c21.jpg", text: "Gabung VIP member untuk akses tanpa batas!", btn: "Gabung VIP" }
+        ];
+
+        const ad2Data = [
+            { video: "https://cdn.videy.co/y8d13TDz1.mp4", label: "🔞 Video Viral Pilihan (Tanpa Sensor)" },
+            { video: "https://cdn.videy.co/TNEvMz2i1.mp4", label: "🔥 Hot Trending Video Full HD" },
+            { video: "https://cdn.videy.co/SGtmLRxe1.mp4", label: "✨ Koleksi Eksklusif Terbaru" }
+        ];
+
+        const ad3Data = [
+            { img: "https://i.ibb.co.com/HTJsbsd4/fcea5b3a19ccaf572bc272793f51ae80.jpg", label: "🔥 Klik Nonton Versi Full HD" },
+            { img: "https://i.ibb.co.com/mppcwLk/86196e3b8ff804c02b93a17e6e8be0e2.jpg", label: "💎 Spesial Konten Terlaris" },
+            { img: "https://i.ibb.co.com/B2Rmzpg6/HWf-M3xzb-YAAyk-EB.jpg", label: "⚡ Update Setiap Hari Tanpa Iklan" }
+        ];
+
+        let ad1Cycle = 0;
+        let ad2Cycle = 0;
+        let ad3Cycle = 0;
+
+        let ad1Timeout = null;
+        let ad2Timeout = null;
+        let ad3Timeout = null;
+
+        // Status tertutup untuk menghitung jeda 1 menit setelah ketiganya tertutup
+        let ad1Closed = false;
+        let ad2Closed = false;
+        let ad3Closed = false;
+        let nextSessionTimeout = null;
+
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let currentCategory = "Semua";
+        let searchQuery = "";
+
+        const videoGrid = document.getElementById('videoGrid');
+        const paginationContainer = document.getElementById('paginationContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const cardContainer = document.getElementById('cardContainer');
+        const cardInner = document.getElementById('cardInner');
+        const mainVideoPlayer = document.getElementById('mainVideoPlayer');
+        const backToGalleryBtn = document.getElementById('backToGalleryBtn');
+        const playerTimer = document.getElementById('playerTimer');
+        const skipTimeBtn = document.getElementById('skipTimeBtn');
+
+        // Render Gallery Grid
+        function renderGallery() {
+            let filtered = videosData.filter(item => {
+                let matchCat = currentCategory === "Semua" || item.cat === currentCategory;
+                let matchSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            let totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            let start = (currentPage - 1) * itemsPerPage;
+            let paginatedItems = filtered.slice(start, start + itemsPerPage);
+
+            videoGrid.innerHTML = "";
+            paginatedItems.forEach(item => {
+                let card = document.createElement('div');
+                card.className = "group relative aspect-[3/4] rounded-2xl overflow-hidden glass-card cursor-pointer shadow-lg hover:border-pink-500/50 transition-all duration-300";
+                card.innerHTML = `
+                    <img src="${item.gambar}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-2.5">
+                        <span class="text-[10px] font-mono text-pink-400 font-semibold mb-0.5">${item.durasi}</span>
+                        <h3 class="text-xs font-bold text-white line-clamp-2 leading-snug">${item.title}</h3>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    triggerSmartlink();
+                    openPlayer(item);
+                });
+                videoGrid.appendChild(card);
+            });
+
+            paginationContainer.innerHTML = `
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled class="text-gray-600 cursor-not-allowed px-2 py-1"' : 'class="text-gray-300 hover:text-white px-2 py-1 font-semibold"'}>Prev</button>
+                <span class="text-gray-400 font-medium">Hal ${currentPage} dari ${totalPages}</span>
+                <button onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled class="text-gray-600 cursor-not-allowed px-2 py-1"' : 'class="text-gray-300 hover:text-white px-2 py-1 font-semibold"'}>Next</button>
+            `;
+        }
+
+        function changePage(page) {
+            let filtered = videosData.filter(item => {
+                let matchCat = currentCategory === "Semua" || item.cat === currentCategory;
+                let matchSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+            let totalPages = Math.ceil(filtered.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderGallery();
+            }
+        }
+
+        // Category Filter
+        document.querySelectorAll('.cat-pill').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.cat-pill').forEach(b => {
+                    b.classList.remove('bg-pink-600', 'text-white', 'shadow-md');
+                    b.classList.add('bg-slate-800/80', 'text-gray-300');
+                });
+                e.target.classList.remove('bg-slate-800/80', 'text-gray-300');
+                e.target.classList.add('bg-pink-600', 'text-white', 'shadow-md');
+                currentCategory = e.target.getAttribute('data-cat');
+                currentPage = 1;
+                renderGallery();
+            });
+        });
+
+        // Search Handlers
+        searchBtn.addEventListener('click', () => {
+            searchQuery = searchInput.value.trim();
+            currentPage = 1;
+            renderGallery();
+        });
+        searchInput.addEventListener('keyup', (e) => {
+            searchQuery = searchInput.value.trim();
+            currentPage = 1;
+            renderGallery();
+        });
+
+        // Open Player & Flip 180 deg
+        function openPlayer(item) {
+            cardInner.classList.add('rotate-y-180');
+            mainVideoPlayer.src = item.video;
+            mainVideoPlayer.play().catch(err => console.log("Autoplay blocked:", err));
+            resetAds();
+            startAdSequence();
+        }
+
+        // Close Player & Flip Back
+        backToGalleryBtn.addEventListener('click', () => {
+            cardInner.classList.remove('rotate-y-180');
+            mainVideoPlayer.pause();
+            mainVideoPlayer.src = "";
+            clearAllAdTimeouts();
+            hideAllAds();
+        });
+
+        mainVideoPlayer.addEventListener('timeupdate', () => {
+            let currentTime = mainVideoPlayer.currentTime;
+            let mins = Math.floor(currentTime / 60);
+            let secs = Math.floor(currentTime % 60);
+            playerTimer.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        });
+
+        skipTimeBtn.addEventListener('click', () => {
+            mainVideoPlayer.currentTime = 9.5; 
+        });
+
+        function startAdSequence() {
+            clearAllAdTimeouts();
+            ad1Closed = false;
+            ad2Closed = false;
+            ad3Closed = false;
+
+            ad1Timeout = setTimeout(() => {
+                showAd1();
+            }, 10000);
+
+            ad3Timeout = setTimeout(() => {
+                showAd3();
+            }, 11000);
+
+            ad2Timeout = setTimeout(() => {
+                showAd2();
+            }, 11500);
+        }
+
+        function showAd1() {
+            if (ad1Cycle >= ad1Data.length) return; // Maksimal 3 siklus (Sesi 1, 2, 3)
+            let currentAd = ad1Data[ad1Cycle];
+            document.getElementById('ad1Img').src = currentAd.img;
+            document.getElementById('ad1Text').innerText = currentAd.text;
+            document.getElementById('ad1BtnText').innerText = currentAd.btn;
+            document.getElementById('ad1').classList.remove('hidden');
+            ad1Closed = false;
+        }
+
+        function showAd2() {
+            if (ad2Cycle >= ad2Data.length) return;
+            let currentAd = ad2Data[ad2Cycle];
+            let v = document.getElementById('ad2Video');
+            v.src = currentAd.video;
+            v.play().catch(e => {});
+            document.getElementById('ad2Label').innerText = currentAd.label;
+            document.getElementById('ad2').classList.remove('hidden');
+            ad2Closed = false;
+        }
+
+        function showAd3() {
+            if (ad3Cycle >= ad3Data.length) return;
+            let currentAd = ad3Data[ad3Cycle];
+            document.getElementById('ad3Img').src = currentAd.img;
+            document.getElementById('ad3Label').innerText = currentAd.label;
+            document.getElementById('ad3').classList.add('hidden'); // Berjaga-jaga
+            document.getElementById('ad3').classList.remove('hidden');
+            ad3Closed = false;
+        }
+
+        function closeAd(adId) {
+            document.getElementById(adId).classList.add('hidden');
+            if(adId === 'ad2') {
+                document.getElementById('ad2Video').pause();
+            }
+
+            if(adId === 'ad1') ad1Closed = true;
+            if(adId === 'ad2') ad2Closed = true;
+            if(adId === 'ad3') ad3Closed = true;
+
+            // Jika ketiganya sudah tertutup pada siklus saat ini, jadwalkan siklus/sesi berikutnya setelah 1 menit (60000 ms)
+            if (ad1Closed && ad2Closed && ad3Closed) {
+                if (ad1Cycle < ad1Data.length - 1) {
+                    clearTimeout(nextSessionTimeout);
+                    nextSessionTimeout = setTimeout(() => {
+                        if(cardInner.classList.contains('rotate-y-180')) {
+                            ad1Cycle++;
+                            ad2Cycle++;
+                            ad3Cycle++;
+                            startAdSequence();
+                        }
+                    }, 60000); // Jeda 1 menit
+                }
+            }
+        }
+
+        function resetAds() {
+            hideAllAds();
+            ad1Cycle = 0;
+            ad2Cycle = 0;
+            ad3Cycle = 0;
+            ad1Closed = false;
+            ad2Closed = false;
+            ad3Closed = false;
+            clearTimeout(nextSessionTimeout);
+        }
+
+        function hideAllAds() {
+            document.getElementById('ad1').classList.add('hidden');
+            document.getElementById('ad2').classList.add('hidden');
+            document.getElementById('ad3').classList.add('hidden');
+            document.getElementById('ad2Video').pause();
+        }
+
+        function clearAllAdTimeouts() {
+            clearTimeout(ad1Timeout);
+            clearTimeout(ad2Timeout);
+            clearTimeout(ad3Timeout);
+            clearTimeout(nextSessionTimeout);
+        }
+
+        renderGallery();
+    </script>
 </body>
 </html>
