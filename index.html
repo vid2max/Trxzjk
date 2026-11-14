@@ -178,18 +178,18 @@
             window.open(url, '_blank');
         }
 
-        // Database 10 Video (Diperbarui dengan link gambar dan video baru)
+        // Database 10 Video (Diperbarui dengan link baru trbnvideo.live)
         const videosData = [
-            { id: 1, title: "Makin cantik saat mendesah", video: "https://vidara.to/e/pkGUs9bWagmHK", gambar: "https://i.ibb.co/kgnVLW6Y/1794387330360.jpg", durasi: "5:21", cat: "Viral" },
-            { id: 2, title: "Tante sange minta dipuasin", video: "https://vidara.to/e/XcBBbmPHkUZzl", gambar: "https://i.ibb.co/PvLKf83y/1794387320861.jpg", durasi: "8:18", cat: "Janda" },
-            { id: 3, title: "Janda kirim pap ke ayang", video: "https://vidara.to/e/wS0ivHnV4jcD8", gambar: "https://i.ibb.co/1J0PRxhm/1794387314100.jpg", durasi: "7:58", cat: "Janda" },
-            { id: 4, title: "ABG masih sempit", video: "https://vidara.to/e/G5nT4DSPKCfYs", gambar: "https://i.ibb.co/Q72t4L1r/1794387307121.jpg", durasi: "8:06", cat: "ABG" },
-            { id: 5, title: "Puasin selingkuhan crot dimuka", video: "https://vidara.to/e/nYdAfR2jYoL6b", gambar: "https://i.ibb.co/1GDmJF7M/1794387234452.jpg", durasi: "4:47", cat: "Viral" },
-            { id: 6, title: "Masih dengan selingkuhan", video: "https://vidara.to/e/m23nKi3BBlaER", gambar: "https://i.ibb.co/0jD0Lk04/1794387208499.jpg", durasi: "1:23", cat: "Viral" },
-            { id: 7, title: "Janda muda menikmati goyangan brondong", video: "https://vidara.to/e/H39SNRFkhiRj3", gambar: "https://i.ibb.co/Q3wS9GNL/1794387157041.jpg", durasi: "3:20", cat: "Janda" },
-            { id: 8, title: "Masih imut sekali", video: "https://vidara.to/e/cRTEmImd0zw1Q", gambar: "https://i.ibb.co/dwgr3Bf3/1794387129039.jpg", durasi: "2:28", cat: "ABG" },
-            { id: 9, title: "Jilbab terbaik", video: "https://vidara.to/e/XYZEdugmk6zhN", gambar: "https://i.ibb.co/7x6xrRxc/1794387219377.jpg", durasi: "5:52", cat: "Jilbab" },
-            { id: 10, title: "Perawat jilbab eksib di RS", video: "https://vidara.to/e/CAZxdNOVVNiVp", gambar: "https://i.ibb.co/fVr1m9zf/1794387118118.jpg", durasi: "9:33", cat: "Jilbab" }
+            { id: 1, title: "Makin cantik saat mendesah", video: "https://trbnvideo.live/e/c3Vih8h7", gambar: "https://i.ibb.co/kgnVLW6Y/1794387330360.jpg", durasi: "5:21", cat: "Viral" },
+            { id: 2, title: "Tante sange minta dipuasin", video: "https://trbnvideo.live/e/JN7slMyd", gambar: "https://i.ibb.co/PvLKf83y/1794387320861.jpg", durasi: "8:18", cat: "Janda" },
+            { id: 3, title: "Janda kirim pap ke ayang", video: "https://trbnvideo.live/e/7BxtdNww", gambar: "https://i.ibb.co/1J0PRxhm/1794387314100.jpg", durasi: "7:58", cat: "Janda" },
+            { id: 4, title: "ABG masih sempit", video: "https://trbnvideo.live/e/e0yDr6Cg", gambar: "https://i.ibb.co/Q72t4L1r/1794387307121.jpg", durasi: "8:06", cat: "ABG" },
+            { id: 5, title: "Puasin selingkuhan crot dimuka", video: "https://trbnvideo.live/e/U29QfxuH", gambar: "https://i.ibb.co/1GDmJF7M/1794387234452.jpg", durasi: "4:47", cat: "Viral" },
+            { id: 6, title: "Masih dengan selingkuhan", video: "https://trbnvideo.live/e/6IE9ZQYp", gambar: "https://i.ibb.co/0jD0Lk04/1794387208499.jpg", durasi: "1:23", cat: "Viral" },
+            { id: 7, title: "Janda muda menikmati goyangan brondong", video: "https://trbnvideo.live/e/JDISyCRX", gambar: "https://i.ibb.co/Q3wS9GNL/1794387157041.jpg", durasi: "3:20", cat: "Janda" },
+            { id: 8, title: "Masih imut sekali", video: "https://trbnvideo.live/e/7OioGtYL", gambar: "https://i.ibb.co/dwgr3Bf3/1794387129039.jpg", durasi: "2:28", cat: "ABG" },
+            { id: 9, title: "Jilbab terbaik", video: "https://trbnvideo.live/e/ygIkheBL", gambar: "https://i.ibb.co/7x6xrRxc/1794387219377.jpg", durasi: "5:52", cat: "Jilbab" },
+            { id: 10, title: "Perawat jilbab eksib di RS", video: "https://trbnvideo.live/e/bGHoVI6t", gambar: "https://i.ibb.co/fVr1m9zf/1794387118118.jpg", durasi: "9:33", cat: "Jilbab" }
         ];
 
         // Assets Iklan 1, 2, 3 (3 Siklus / Sesi)
@@ -219,7 +219,6 @@
         let ad2Timeout = null;
         let ad3Timeout = null;
 
-        // Status tertutup untuk menghitung jeda 1 menit setelah ketiganya tertutup
         let ad1Closed = false;
         let ad2Closed = false;
         let ad3Closed = false;
@@ -369,7 +368,7 @@
         }
 
         function showAd1() {
-            if (ad1Cycle >= ad1Data.length) return; // Maksimal 3 siklus (Sesi 1, 2, 3)
+            if (ad1Cycle >= ad1Data.length) return;
             let currentAd = ad1Data[ad1Cycle];
             document.getElementById('ad1Img').src = currentAd.img;
             document.getElementById('ad1Text').innerText = currentAd.text;
@@ -394,7 +393,7 @@
             let currentAd = ad3Data[ad3Cycle];
             document.getElementById('ad3Img').src = currentAd.img;
             document.getElementById('ad3Label').innerText = currentAd.label;
-            document.getElementById('ad3').classList.add('hidden'); // Berjaga-jaga
+            document.getElementById('ad3').classList.add('hidden');
             document.getElementById('ad3').classList.remove('hidden');
             ad3Closed = false;
         }
@@ -409,7 +408,6 @@
             if(adId === 'ad2') ad2Closed = true;
             if(adId === 'ad3') ad3Closed = true;
 
-            // Jika ketiganya sudah tertutup pada siklus saat ini, jadwalkan siklus/sesi berikutnya setelah 1 menit (60000 ms)
             if (ad1Closed && ad2Closed && ad3Closed) {
                 if (ad1Cycle < ad1Data.length - 1) {
                     clearTimeout(nextSessionTimeout);
@@ -420,7 +418,7 @@
                             ad3Cycle++;
                             startAdSequence();
                         }
-                    }, 60000); // Jeda 1 menit
+                    }, 60000);
                 }
             }
         }
