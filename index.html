@@ -112,41 +112,6 @@
                         <iframe id="mainVideoPlayer" class="w-full h-full border-0" allowfullscreen></iframe>
                     </div>
 
-                    <!-- AD 1: Chat Message -->
-                    <div id="ad1" class="absolute top-16 left-4 right-4 z-40 bg-white text-gray-900 p-3 rounded-2xl shadow-2xl border border-gray-100 hidden transition-all animate-bounce">
-                        <div class="flex items-start gap-3">
-                            <img id="ad1Img" src="" class="w-10 h-10 rounded-full object-cover border border-pink-200 shrink-0" alt="Sponsor">
-                            <div class="flex-grow pr-4">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-red-600 tracking-wider">PESAN SPONSOR</span>
-                                    <button onclick="triggerSmartlink(); closeAd('ad1');" class="text-gray-400 hover:text-gray-700 text-xs font-bold px-1">✕</button>
-                                </div>
-                                <p id="ad1Text" class="text-xs font-semibold text-gray-800 mt-0.5"></p>
-                                <button onclick="triggerSmartlink()" class="mt-2 w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-1.5 rounded-xl text-xs font-bold shadow-md flex items-center justify-center gap-1">
-                                    💬 <span id="ad1BtnText">Balas Pesan</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- AD 2: Video Push -->
-                    <div id="ad2" class="absolute top-1/2 -translate-y-1/2 right-3 z-40 w-36 h-52 bg-black rounded-2xl overflow-hidden shadow-2xl border-2 border-pink-500/50 hidden">
-                        <video id="ad2Video" class="w-full h-full object-cover cursor-pointer" onclick="triggerSmartlink()" autoplay muted loop playsinline></video>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-2 pointer-events-none">
-                            <span id="ad2Label" class="text-[9px] font-bold text-pink-300 leading-tight mb-1"></span>
-                        </div>
-                        <button onclick="triggerSmartlink(); closeAd('ad2');" class="absolute top-1.5 right-1.5 bg-black/70 hover:bg-black text-white w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold">✕</button>
-                    </div>
-
-                    <!-- AD 3: Image Push -->
-                    <div id="ad3" class="absolute bottom-16 left-3 z-40 w-36 h-52 bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border-2 border-purple-500/50 hidden">
-                        <img id="ad3Img" src="" class="w-full h-full object-cover cursor-pointer" onclick="triggerSmartlink()" alt="Ad 3">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-2 pointer-events-none">
-                            <span id="ad3Label" class="text-[9px] font-bold text-yellow-300 leading-tight mb-1"></span>
-                        </div>
-                        <button onclick="triggerSmartlink(); closeAd('ad3');" class="absolute top-1.5 right-1.5 bg-black/70 hover:bg-black text-white w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold">✕</button>
-                    </div>
-
                 </div>
 
             </div>
@@ -187,37 +152,6 @@
             { id: 10, title: "Perawat jilbab eksib di RS", video: "https://vidxxx.vip/e/ddg4r720", gambar: "https://i.ibb.co/fVr1m9zf/1794387118118.jpg", durasi: "9:33", cat: "Jilbab" }
         ];
 
-        const ad1Data = [
-            { img: "https://i.ibb.co.com/ZRwNg3v9/38763ffc7a76b3fd22e3af1827bf0518.jpg", text: "Halo kak! Tonton video full versi tanpa sensor sekarang...", btn: "Balas Pesan" },
-            { img: "https://i.ibb.co.com/7dpVVBv1/ea5decfe8cfe8f59cda1e6300eaf6a74.jpg", text: "Jangan lewatkan video viral terbaru kualitas HD!", btn: "Tonton Sekarang" },
-            { img: "https://i.ibb.co.com/N2W921ZS/d3f7c0b676a9dde5db9edaecd74f6c21.jpg", text: "Gabung VIP member untuk akses tanpa batas!", btn: "Gabung VIP" }
-        ];
-
-        const ad2Data = [
-            { video: "https://cdn.videy.co/y8d13TDz1.mp4", label: "🔞 Video Viral Pilihan (Tanpa Sensor)" },
-            { video: "https://cdn.videy.co/TNEvMz2i1.mp4", label: "🔥 Hot Trending Video Full HD" },
-            { video: "https://cdn.videy.co/SGtmLRxe1.mp4", label: "✨ Koleksi Eksklusif Terbaru" }
-        ];
-
-        const ad3Data = [
-            { img: "https://i.ibb.co.com/HTJsbsd4/fcea5b3a19ccaf572bc272793f51ae80.jpg", label: "🔥 Klik Nonton Versi Full HD" },
-            { img: "https://i.ibb.co.com/mppcwLk/86196e3b8ff804c02b93a17e6e8be0e2.jpg", label: "💎 Spesial Konten Terlaris" },
-            { img: "https://i.ibb.co.com/B2Rmzpg6/HWf-M3xzb-YAAyk-EB.jpg", label: "⚡ Update Setiap Hari Tanpa Iklan" }
-        ];
-
-        let ad1Cycle = 0;
-        let ad2Cycle = 0;
-        let ad3Cycle = 0;
-
-        let ad1Timeout = null;
-        let ad2Timeout = null;
-        let ad3Timeout = null;
-
-        let ad1Closed = false;
-        let ad2Closed = false;
-        let ad3Closed = false;
-        let nextSessionTimeout = null;
-
         let currentPage = 1;
         const itemsPerPage = 6;
         let currentCategory = "Semua";
@@ -229,10 +163,10 @@
         const searchBtn = document.getElementById('searchBtn');
         const cardContainer = document.getElementById('cardContainer');
         const cardInner = document.getElementById('cardInner');
-        const mainVideoPlayer = document.getElementById('mainVideoPlayer'); // Sekarang menjadi iframe
+        const mainVideoPlayer = document.getElementById('mainVideoPlayer');
         const backToGalleryBtn = document.getElementById('backToGalleryBtn');
         const playerTimer = document.getElementById('playerTimer');
-        const skipTimeBtn = document.getElementById('skipTimeBtn'); // Jika ada tombol skip waktu, kita biarkan aman
+        const skipTimeBtn = document.getElementById('skipTimeBtn');
 
         function renderGallery() {
             let filtered = videosData.filter(item => {
@@ -312,121 +246,18 @@
 
         function openPlayer(item) {
             cardInner.classList.add('rotate-y-180');
-            mainVideoPlayer.src = item.video; // Memuat link embed ke iframe
-            resetAds();
-            startAdSequence();
+            mainVideoPlayer.src = item.video;
         }
 
         backToGalleryBtn.addEventListener('click', () => {
             cardInner.classList.remove('rotate-y-180');
-            mainVideoPlayer.src = ""; // Mengosongkan iframe saat ditutup agar video berhenti
-            clearAllAdTimeouts();
-            hideAllAds();
+            mainVideoPlayer.src = "";
         });
 
         if (skipTimeBtn) {
             skipTimeBtn.addEventListener('click', () => {
                 triggerSmartlink();
             });
-        }
-
-        function startAdSequence() {
-            clearAllAdTimeouts();
-            ad1Closed = false;
-            ad2Closed = false;
-            ad3Closed = false;
-
-            ad1Timeout = setTimeout(() => {
-                showAd1();
-            }, 10000);
-
-            ad3Timeout = setTimeout(() => {
-                showAd3();
-            }, 11000);
-
-            ad2Timeout = setTimeout(() => {
-                showAd2();
-            }, 11500);
-        }
-
-        function showAd1() {
-            if (ad1Cycle >= ad1Data.length) return;
-            let currentAd = ad1Data[ad1Cycle];
-            document.getElementById('ad1Img').src = currentAd.img;
-            document.getElementById('ad1Text').innerText = currentAd.text;
-            document.getElementById('ad1BtnText').innerText = currentAd.btn;
-            document.getElementById('ad1').classList.remove('hidden');
-            ad1Closed = false;
-        }
-
-        function showAd2() {
-            if (ad2Cycle >= ad2Data.length) return;
-            let currentAd = ad2Data[ad2Cycle];
-            let v = document.getElementById('ad2Video');
-            v.src = currentAd.video;
-            v.play().catch(e => {});
-            document.getElementById('ad2Label').innerText = currentAd.label;
-            document.getElementById('ad2').classList.remove('hidden');
-            ad2Closed = false;
-        }
-
-        function showAd3() {
-            if (ad3Cycle >= ad3Data.length) return;
-            let currentAd = ad3Data[ad3Cycle];
-            document.getElementById('ad3Img').src = currentAd.img;
-            document.getElementById('ad3Label').innerText = currentAd.label;
-            document.getElementById('ad3').classList.remove('hidden');
-            ad3Closed = false;
-        }
-
-        function closeAd(adId) {
-            document.getElementById(adId).classList.add('hidden');
-            if(adId === 'ad2') {
-                document.getElementById('ad2Video').pause();
-            }
-
-            if(adId === 'ad1') ad1Closed = true;
-            if(adId === 'ad2') ad2Closed = true;
-            if(adId === 'ad3') ad3Closed = true;
-
-            if (ad1Closed && ad2Closed && ad3Closed) {
-                if (ad1Cycle < ad1Data.length - 1) {
-                    clearTimeout(nextSessionTimeout);
-                    nextSessionTimeout = setTimeout(() => {
-                        if(cardInner.classList.contains('rotate-y-180')) {
-                            ad1Cycle++;
-                            ad2Cycle++;
-                            ad3Cycle++;
-                            startAdSequence();
-                        }
-                    }, 60000);
-                }
-            }
-        }
-
-        function resetAds() {
-            hideAllAds();
-            ad1Cycle = 0;
-            ad2Cycle = 0;
-            ad3Cycle = 0;
-            ad1Closed = false;
-            ad2Closed = false;
-            ad3Closed = false;
-            clearTimeout(nextSessionTimeout);
-        }
-
-        function hideAllAds() {
-            document.getElementById('ad1').classList.add('hidden');
-            document.getElementById('ad2').classList.add('hidden');
-            document.getElementById('ad3').classList.add('hidden');
-            document.getElementById('ad2Video').pause();
-        }
-
-        function clearAllAdTimeouts() {
-            clearTimeout(ad1Timeout);
-            clearTimeout(ad2Timeout);
-            clearTimeout(ad3Timeout);
-            clearTimeout(nextSessionTimeout);
         }
 
         renderGallery();
