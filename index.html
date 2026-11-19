@@ -44,6 +44,13 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
@@ -99,10 +106,11 @@
                     
                     <!-- Player Top Bar Controls -->
                     <div class="absolute top-4 left-4 right-4 z-30 flex items-center justify-between pointer-events-none">
-                        <div class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-mono text-pink-400 border border-white/10 pointer-events-auto flex items-center gap-2">
-                            <span id="playerTimer">Pemutar Aktif</span>
+                        <div class="bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-mono text-pink-400 border border-white/10 pointer-events-auto flex items-center gap-2 shadow-lg">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <span id="playerTimer">Streaming HD</span>
                         </div>
-                        <button id="backToGalleryBtn" class="pointer-events-auto bg-black/70 hover:bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold border border-white/20 backdrop-blur-md shadow-lg transition-all flex items-center gap-1.5">
+                        <button id="backToGalleryBtn" class="pointer-events-auto bg-slate-900/80 hover:bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold border border-white/20 backdrop-blur-md shadow-lg transition-all flex items-center gap-1.5">
                             ← Galeri
                         </button>
                     </div>
@@ -110,6 +118,32 @@
                     <!-- Video / Embed Iframe Element -->
                     <div class="relative w-full h-full flex-grow bg-black flex items-center justify-center">
                         <iframe id="mainVideoPlayer" class="w-full h-full border-0" allowfullscreen></iframe>
+                        
+                        <!-- Video Overlay UI Design (Play indicator skin) -->
+                        <div class="absolute inset-0 bg-transparent pointer-events-none flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-pink-600/30 backdrop-blur-sm border border-pink-500/50 flex items-center justify-center text-white opacity-60">
+                                <svg class="w-8 h-8 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IN-PAGE PUSH NOTIFICATION AD (Dynamic popup inside player) -->
+                    <div id="inPagePush" class="absolute bottom-4 left-4 right-4 z-40 hidden">
+                        <div id="pushBannerBody" class="bg-slate-900/95 border border-pink-500/40 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl flex items-center gap-3 cursor-pointer hover:border-pink-500 transition-all animate-slide-up">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center shrink-0 shadow-md">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400 bg-pink-500/10 px-1.5 py-0.5 rounded">Rekomendasi</span>
+                                    <span class="text-[10px] text-gray-400">Baru saja</span>
+                                </div>
+                                <h4 id="pushTitle" class="text-xs font-bold text-white truncate mt-0.5">Tonton Video Full Durasi Tanpa Iklan</h4>
+                            </div>
+                            <button id="pushCloseBtn" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-gray-400 hover:text-white flex items-center justify-center text-xs shrink-0 transition-colors">
+                                ✕
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -122,9 +156,6 @@
     <footer class="w-full py-4 text-center text-xs text-gray-500 border-t border-slate-800/80">
         &copy; 2026 Gallery Videos XXX. All rights reserved.
     </footer>
-
-    <!-- Popunder Script -->
-    
 
     <script>
         const smartlinks = [
@@ -156,17 +187,19 @@
         const itemsPerPage = 6;
         let currentCategory = "Semua";
         let searchQuery = "";
+        let pushInterval = null;
+        let pushTimeout = null;
 
         const videoGrid = document.getElementById('videoGrid');
         const paginationContainer = document.getElementById('paginationContainer');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
-        const cardContainer = document.getElementById('cardContainer');
         const cardInner = document.getElementById('cardInner');
         const mainVideoPlayer = document.getElementById('mainVideoPlayer');
         const backToGalleryBtn = document.getElementById('backToGalleryBtn');
-        const playerTimer = document.getElementById('playerTimer');
-        const skipTimeBtn = document.getElementById('skipTimeBtn');
+        const inPagePush = document.getElementById('inPagePush');
+        const pushBannerBody = document.getElementById('pushBannerBody');
+        const pushCloseBtn = document.getElementById('pushCloseBtn');
 
         function renderGallery() {
             let filtered = videosData.filter(item => {
@@ -244,21 +277,60 @@
             renderGallery();
         });
 
+        function startInPagePushCycle() {
+            // Clear existing timers to avoid stacking
+            clearTimeout(pushTimeout);
+            clearInterval(pushInterval);
+
+            // Muncul pertama kali setelah 10 detik video berjalan
+            pushTimeout = setTimeout(() => {
+                showPushBanner();
+                
+                // Muncul berikutnya setiap 20 detik sekali
+                pushInterval = setInterval(() => {
+                    showPushBanner();
+                }, 20000);
+            }, 10000);
+        }
+
+        function showPushBanner() {
+            inPagePush.classList.remove('hidden');
+            // Auto hide setelah 8 detik jika tidak diklik
+            setTimeout(() => {
+                inPagePush.classList.add('hidden');
+            }, 8000);
+        }
+
+        function stopInPagePushCycle() {
+            clearTimeout(pushTimeout);
+            clearInterval(pushInterval);
+            inPagePush.classList.add('hidden');
+        }
+
         function openPlayer(item) {
             cardInner.classList.add('rotate-y-180');
             mainVideoPlayer.src = item.video;
+            startInPagePushCycle();
         }
 
         backToGalleryBtn.addEventListener('click', () => {
             cardInner.classList.remove('rotate-y-180');
             mainVideoPlayer.src = "";
+            stopInPagePushCycle();
         });
 
-        if (skipTimeBtn) {
-            skipTimeBtn.addEventListener('click', () => {
-                triggerSmartlink();
-            });
-        }
+        // Event listener untuk In-Page Push dan tombol close (terhubung smartlink)
+        pushBannerBody.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerSmartlink();
+            inPagePush.classList.add('hidden');
+        });
+
+        pushCloseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerSmartlink();
+            inPagePush.classList.add('hidden');
+        });
 
         renderGallery();
     </script>
